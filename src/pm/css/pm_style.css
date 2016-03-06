@@ -41,13 +41,15 @@
     -fx-fit-to-height: true;
     -fx-fit-to-width: true;
     -fx-background-color:#ccccff;
+    -fx-border-color: #7777dd;
+    -fx-border-width: 2px;
 }
 
 // CSS CLASS FOR OUR BIG PANES
 .bordered_pane {
     -fx-background-color: #aaaaff;
     -fx-background-radius: 5.0;
-    -fx-padding:15;
+    //-fx-padding:15;
     -fx-spacing: 10;
     -fx-border-width: 2px;
     -fx-border-color: #7777dd;
@@ -79,3 +81,4 @@
 .render_canvas {
     -fx-background-color:#ffef84;
 }
+
