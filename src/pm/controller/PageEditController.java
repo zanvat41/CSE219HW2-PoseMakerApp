@@ -2,8 +2,14 @@ package pm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebEngine;
 import properties_manager.PropertiesManager;
 import saf.controller.AppFileController;
@@ -19,7 +25,6 @@ import pm.gui.Workspace;
  * this application for things like adding elements, removing elements, and
  * editing them.
  *
- * @author Richard McKenna
  * @author Zhe Lin
  * @version 1.0
  */
@@ -28,9 +33,11 @@ public class PageEditController {
     // HERE'S THE FULL APP, WHICH GIVES US ACCESS TO OTHER STUFF
     PoseMaker app;
 
-    // WE USE THIS TO MAKE SURE OUR PROGRAMMED UPDATES OF UI
-    // VALUES DON'T THEMSELVES TRIGGER EVENTS
-    private boolean enabled;
+    double bX, bY;
+    double eX, eY;
+    // double previousX, previousY;
+    
+    Rectangle rect;
 
     /**
      * Constructor for initializing this object, it will keep the app for later.
@@ -48,10 +55,63 @@ public class PageEditController {
      * @param enableSetting If false, this controller will not respond to
      * workspace editing. If true, it will.
      */
-    public void enable(boolean enableSetting) {
+    /*public void enable(boolean enableSetting) {
 	enabled = enableSetting;
+    }*/
+    
+    public void addRect() {
+        // FIRST, CHANGE THE SIZE OF THE CURSOR
+        app.getGUI().getAppPane().setCursor(Cursor.MOVE);
+        app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                bX = mouseEvent.getX();
+                bY = mouseEvent.getY();
+                //System.out.println(bX);
+            }
+        }); 
+        
+        app.getGUI().getAppPane().setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                drawRect();
+            }
+        }); 
+        
+        app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                eX = mouseEvent.getX();
+                eY = mouseEvent.getY();
+                deleteRect();
+                drawRect();
+            }
+        }); 
+        
+        /*app.getGUI().getAppPane().setOnMouseDragReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                eX = mouseEvent.getX();
+                eY = mouseEvent.getY();
+                if(eX >= previousX && eY >= previousY)
+                    drawRect();
+                previousX = eX;
+                previousY = eY;
+            }
+        });*/
+        
     }
 
+    private void drawRect() {
+        rect = new Rectangle(bX, bY, eX - bX, eY - bY);
+        rect.setFill(Color.BLACK);
+        app.getGUI().getAppPane().getChildren().add(rect);
+    }
+    
+    private void deleteRect() {
+        app.getGUI().getAppPane().getChildren().remove(rect);
+    }
+    
     /**
      * This function responds live to the user typing changes into a text field
      * for updating element attributes. It will respond by updating the

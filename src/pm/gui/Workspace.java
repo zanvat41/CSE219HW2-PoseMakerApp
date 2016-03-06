@@ -184,6 +184,9 @@ public class Workspace extends AppWorkspaceComponent {
         rectButton = new Button();
         Image rectImage = new Image("file:./images/Rect.png");
         rectButton.setGraphic(new ImageView(rectImage));
+        rectButton.setOnAction(e -> {
+	    pageEditController.addRect();
+	});
 	ShapeButtons.getChildren().add(rectButton);
         
         ellipseButton = new Button();
