@@ -192,6 +192,9 @@ public class Workspace extends AppWorkspaceComponent {
         ellipseButton = new Button();
         Image ellipseImage = new Image("file:./images/Ellipse.png");
         ellipseButton.setGraphic(new ImageView(ellipseImage));
+        ellipseButton.setOnAction(e -> {
+            pageEditController.addEllipse();
+        });
 	ShapeButtons.getChildren().add(ellipseButton);
         
         frontButton = new Button();
