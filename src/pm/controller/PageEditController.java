@@ -40,6 +40,7 @@ public class PageEditController {
     double bX, bY; // Starting point for drawing
     double eX, eY; // Ending point for drawing
     double bX1, bY1; // Starting point for selecting
+    double eX1, eY1; // Ending point for selecting and dragging
     
     Shape selectedItem = null;
     Shape lastItem = null;
@@ -181,11 +182,27 @@ public class PageEditController {
         app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                //bX1 = mouseEvent.getX();
-                //bY1 = mouseEvent.getY();
-                //select();
+                eX1 = mouseEvent.getX();
+                eY1 = mouseEvent.getY();
+                if(!selectedItem.equals(null) && selectedItem.isPressed()) {
+                    selectedItem.setLayoutX(eX1 - selectedItem.getLayoutBounds().getMinX());
+                    selectedItem.setLayoutY(eY1 - selectedItem.getLayoutBounds().getMinY());
+                }
             }
         });
+        
+        /*app.getGUI().getAppPane().setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(!selectedItem.equals(null) && selectedItem.isPressed()) {
+                    selectedItem.setLayoutX(eX1 - bX1);
+                    selectedItem.setLayoutY(eY1 - bY1); 
+                }
+                bX1 = eX1;
+                bY1 = eY1;
+            }
+        });*/
+        
     }
     
     private void select() {
@@ -210,6 +227,7 @@ public class PageEditController {
             selectedItem.setStrokeWidth(10);
             lastItem = selectedItem;
             selected = true;
+            //app.getGUI().getAppPane();
         }
     }
     
