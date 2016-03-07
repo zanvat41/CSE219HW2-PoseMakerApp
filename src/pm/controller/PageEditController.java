@@ -40,7 +40,9 @@ public class PageEditController {
     double bX, bY; // Starting point for drawing
     double eX, eY; // Ending point for drawing
     double bX1, bY1; // Starting point for selecting
+    double bX2, bY2; // Starting point for selecting and dragging
     double eX1, eY1; // Ending point for selecting and dragging
+    double scX, scY;
     
     Shape selectedItem = null;
     Shape lastItem = null;
@@ -173,43 +175,37 @@ public class PageEditController {
         app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                scX = mouseEvent.getSceneX();
+                scY = mouseEvent.getSceneY();
                 bX1 = mouseEvent.getX();
                 bY1 = mouseEvent.getY();
                 select();
+                bX2 = selectedItem.getTranslateX();
+                bY2 = selectedItem.getTranslateY();
             }
         });
         
+        // DRAG AND DROP TO RELOCATE THE SHAPE
         app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                eX1 = mouseEvent.getX();
-                eY1 = mouseEvent.getY();
-                if(!selectedItem.equals(null) && selectedItem.isPressed()) {
-                    selectedItem.setLayoutX(eX1 - selectedItem.getLayoutBounds().getMinX());
-                    selectedItem.setLayoutY(eY1 - selectedItem.getLayoutBounds().getMinY());
+                double offsetX = mouseEvent.getSceneX() - scX;
+                double offsetY = mouseEvent.getSceneY() - scY;
+                double newTranslateX = bX2 + offsetX;
+                double newTranslateY = bY2 + offsetY;
+                if(selectedItem.isPressed()) {
+                    selectedItem.setTranslateX(newTranslateX);
+                    selectedItem.setTranslateY(newTranslateY);
                 }
             }
         });
-        
-        /*app.getGUI().getAppPane().setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(!selectedItem.equals(null) && selectedItem.isPressed()) {
-                    selectedItem.setLayoutX(eX1 - bX1);
-                    selectedItem.setLayoutY(eY1 - bY1); 
-                }
-                bX1 = eX1;
-                bY1 = eY1;
-            }
-        });*/
-        
     }
     
     private void select() {
         Point2D p = new Point2D(bX1, bY1);
         boolean contains = false;
         for (Shape s : shapes) {
-            if(s.contains(p)) {
+            if(s.isPressed()) {
                 selectedItem = s;
                 contains = true;
             }
@@ -227,7 +223,6 @@ public class PageEditController {
             selectedItem.setStrokeWidth(10);
             lastItem = selectedItem;
             selected = true;
-            //app.getGUI().getAppPane();
         }
     }
     
