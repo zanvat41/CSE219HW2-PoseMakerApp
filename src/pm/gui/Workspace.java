@@ -277,7 +277,12 @@ public class Workspace extends AppWorkspaceComponent {
         otThick = new Label("Outline Thickness");
         Thickness.getChildren().add(otThick);
         
-        outlineSlider = new Slider();
+        outlineSlider = new Slider(0, 15, 0);
+        //outlineSlider.setMin(0);
+        //outlineSlider.setMax(15);
+        outlineSlider.valueProperty().addListener((oV, cV, nV) -> {
+            pageEditController.changeOutlineThickness(outlineSlider);
+        });
         Thickness.getChildren().add(outlineSlider);
         
         // FOR SNAP SHOT

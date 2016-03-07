@@ -64,6 +64,7 @@ public class PageEditController {
     
     Color fill = Color.WHITE;
     Color outline = Color.WHITE;
+    double thickness = 0;
     
     /**
      * Constructor for initializing this object, it will keep the app for later.
@@ -123,6 +124,7 @@ public class PageEditController {
         rect = new Rectangle(bX, bY, eX - bX, eY - bY);
         rect.setFill(fill);
         rect.setStroke(outline);
+        rect.setStrokeWidth(thickness);
         app.getGUI().getAppPane().getChildren().add(rect);
         shapes.add(rect);
     }
@@ -171,6 +173,7 @@ public class PageEditController {
         ellipse = new Ellipse((eX + bX) / 2, (eY + bY) / 2, (eX - bX) / 2, (eY - bY) / 2);
         ellipse.setFill(fill);
         ellipse.setStroke(outline);
+        ellipse.setStrokeWidth(thickness);
         app.getGUI().getAppPane().getChildren().add(ellipse);
         shapes.add(ellipse);
     }
@@ -285,7 +288,7 @@ public class PageEditController {
     }
     
     public void changeOutlineThickness(Slider s) {
-    
+        thickness = s.getValue();
     }
     /**
      * This function responds live to the user typing changes into a text field
