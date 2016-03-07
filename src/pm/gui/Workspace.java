@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
@@ -95,7 +96,7 @@ public class Workspace extends AppWorkspaceComponent {
     Button ellipseButton;
     Button frontButton;
     Button backButton;
-    Button bgcButton;
+    ColorPicker bgcButton;
     Button fcButton;
     Button otcButton;
     Button SnapshotButton;
@@ -230,7 +231,10 @@ public class Workspace extends AppWorkspaceComponent {
         bgColor = new Label("Background Color");
         BackGroundColor.getChildren().add(bgColor);
         
-        bgcButton = new Button("background color");
+        bgcButton = new ColorPicker();
+        bgcButton.setOnAction(e -> {
+            pageEditController.changeBackgroundColor(bgcButton);
+        });
         BackGroundColor.getChildren().add(bgcButton);
         
         // FILL COLOR

@@ -7,9 +7,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
@@ -253,6 +255,14 @@ public class PageEditController {
         app.getGUI().getAppPane().getChildren().set(x, temp);
         app.getGUI().getAppPane().getChildren().set(y, selectedItem);
         app.getGUI().getAppPane().getChildren().set(x, shapeToSwap);     
+    }
+
+    public void changeBackgroundColor(ColorPicker color) {
+        String colorValue = color.getValue().toString();
+        colorValue = colorValue.substring(2);
+        BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+        pmWorkspace.getCenter().setStyle("-fx-background-color: #" +  colorValue +";");
+        System.out.println(color.getValue());
     }
     
     
