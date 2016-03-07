@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
@@ -283,7 +284,9 @@ public class PageEditController {
         outline = Color.valueOf(otColor);
     }
     
+    public void changeOutlineThickness(Slider s) {
     
+    }
     /**
      * This function responds live to the user typing changes into a text field
      * for updating element attributes. It will respond by updating the
