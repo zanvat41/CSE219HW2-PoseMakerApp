@@ -11,6 +11,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -230,6 +231,30 @@ public class PageEditController {
         app.getGUI().getAppPane().getChildren().remove(selectedItem);
         shapes.remove(selectedItem);
     }
+    
+    
+    public void moveToFront() {
+        int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
+        if (index + 1 < app.getGUI().getAppPane().getChildren().size())
+            swap(index, index + 1);
+    }
+    
+    public void moveToBack() {
+        int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
+        if (index - 1 >= shapes.size())
+            swap(index, index - 1);
+    }
+    
+    private void swap(int x, int y) {
+        Shape shapeToSwap = (Shape) app.getGUI().getAppPane().getChildren().get(y);
+        Circle temp = new Circle();
+        //app.getGUI().getAppPane().getChildren().remove(x);
+        //app.getGUI().getAppPane().getChildren().remove(y);
+        app.getGUI().getAppPane().getChildren().set(x, temp);
+        app.getGUI().getAppPane().getChildren().set(y, selectedItem);
+        app.getGUI().getAppPane().getChildren().set(x, shapeToSwap);     
+    }
+    
     
     /**
      * This function responds live to the user typing changes into a text field

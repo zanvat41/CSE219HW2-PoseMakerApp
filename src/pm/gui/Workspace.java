@@ -206,11 +206,17 @@ public class Workspace extends AppWorkspaceComponent {
         frontButton = new Button();
         Image frontImage = new Image("file:./images/MoveToFront.png");
         frontButton.setGraphic(new ImageView(frontImage));
+        frontButton.setOnAction(e -> {
+            pageEditController.moveToFront();
+        });
 	FrontBack.getChildren().add(frontButton);
         
         backButton = new Button();
         Image backImage = new Image("file:./images/MoveToBack.png");
         backButton.setGraphic(new ImageView(backImage));
+        backButton.setOnAction(e -> {
+            pageEditController.moveToBack();
+        });
 	FrontBack.getChildren().add(backButton);
         
         // FOR THE BUTTONS SPACES
