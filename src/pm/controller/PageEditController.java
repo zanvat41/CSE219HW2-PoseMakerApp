@@ -43,7 +43,8 @@ public class PageEditController {
     
     Shape selectedItem = null;
     Shape lastItem = null;
-    Shape lastItemStyle = null;
+    Color lastColor;
+    double lastWidth;
     ArrayList<Shape> shapes = new ArrayList();
     Rectangle rect;
     Ellipse ellipse;
@@ -89,6 +90,7 @@ public class PageEditController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 drawRect();
+                deleteRect();
             }
         }); 
         
@@ -135,6 +137,7 @@ public class PageEditController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 drawEllipse();
+                deleteEllipse();
             }
         }); 
         
@@ -186,7 +189,6 @@ public class PageEditController {
     }
     
     private void select() {
-        //ObservableList<Node> Nodes = app.getGUI().getAppPane().getChildren();
         Point2D p = new Point2D(bX1, bY1);
         boolean contains = false;
         for (Shape s : shapes) {
@@ -197,19 +199,15 @@ public class PageEditController {
         }
         if (contains) {
             if(selected){
-                //app.getGUI().getAppPane().getChildren().remove(lastItem);
-                //shapes.remove(lastItem);
-                //app.getGUI().getAppPane().getChildren().add(lastItemStyle);
-                //shapes.add(lastItemStyle);
+                // Disselect the previous selected item
+                lastItem.setStroke(lastColor);
+                lastItem.setStrokeWidth(lastWidth);
             }
-            lastItemStyle = selectedItem;
-            //System.out.println(lastItemStyle);
-            app.getGUI().getAppPane().getChildren().remove(selectedItem);
-            shapes.remove(selectedItem);
+            
+            lastColor = (Color) selectedItem.getStroke();
+            lastWidth = selectedItem.getStrokeWidth();
             selectedItem.setStroke(Color.GREEN);
             selectedItem.setStrokeWidth(10);
-            app.getGUI().getAppPane().getChildren().add(selectedItem);
-            shapes.add(selectedItem);
             lastItem = selectedItem;
             selected = true;
         }
