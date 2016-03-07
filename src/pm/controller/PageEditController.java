@@ -56,7 +56,14 @@ public class PageEditController {
     Ellipse ellipse;
     
     boolean selected = false;
-
+    
+    String bgColor = "ffef84";
+    String fColor = "Color.WHITE";
+    String otColor = "Color.WHITE";
+    
+    Color fill = Color.WHITE;
+    Color outline = Color.WHITE;
+    
     /**
      * Constructor for initializing this object, it will keep the app for later.
      *
@@ -113,7 +120,8 @@ public class PageEditController {
 
     private void drawRect() {
         rect = new Rectangle(bX, bY, eX - bX, eY - bY);
-        rect.setFill(Color.BLACK);
+        rect.setFill(fill);
+        rect.setStroke(outline);
         app.getGUI().getAppPane().getChildren().add(rect);
         shapes.add(rect);
     }
@@ -160,7 +168,8 @@ public class PageEditController {
 
     private void drawEllipse() {
         ellipse = new Ellipse((eX + bX) / 2, (eY + bY) / 2, (eX - bX) / 2, (eY - bY) / 2);
-        ellipse.setFill(Color.RED);
+        ellipse.setFill(fill);
+        ellipse.setStroke(outline);
         app.getGUI().getAppPane().getChildren().add(ellipse);
         shapes.add(ellipse);
     }
@@ -243,26 +252,35 @@ public class PageEditController {
     
     public void moveToBack() {
         int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
-        if (index - 1 >= shapes.size())
+        if (index >= shapes.size())
             swap(index, index - 1);
     }
     
     private void swap(int x, int y) {
         Shape shapeToSwap = (Shape) app.getGUI().getAppPane().getChildren().get(y);
         Circle temp = new Circle();
-        //app.getGUI().getAppPane().getChildren().remove(x);
-        //app.getGUI().getAppPane().getChildren().remove(y);
         app.getGUI().getAppPane().getChildren().set(x, temp);
         app.getGUI().getAppPane().getChildren().set(y, selectedItem);
-        app.getGUI().getAppPane().getChildren().set(x, shapeToSwap);     
+        app.getGUI().getAppPane().getChildren().set(x, shapeToSwap);
     }
 
     public void changeBackgroundColor(ColorPicker color) {
-        String colorValue = color.getValue().toString();
-        colorValue = colorValue.substring(2);
+        bgColor = color.getValue().toString();
+        bgColor = bgColor.substring(2);
         BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
-        pmWorkspace.getCenter().setStyle("-fx-background-color: #" +  colorValue +";");
-        System.out.println(color.getValue());
+        pmWorkspace.getCenter().setStyle("-fx-background-color: #" +  bgColor +";");
+    }
+
+    public void changFillColor(ColorPicker color) {
+        fColor = color.getValue().toString();
+        fColor = fColor.substring(2);
+        fill = Color.valueOf(fColor);     
+    }
+
+    public void changeOutlineColor(ColorPicker color) {
+        otColor = color.getValue().toString();
+        otColor = otColor.substring(2);
+        outline = Color.valueOf(otColor);
     }
     
     

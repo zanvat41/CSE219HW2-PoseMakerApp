@@ -37,6 +37,7 @@ import pm.data.DataManager;
 import pm.controller.PageEditController;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 /**
  * This class serves as the workspace component for this application, providing
@@ -97,8 +98,8 @@ public class Workspace extends AppWorkspaceComponent {
     Button frontButton;
     Button backButton;
     ColorPicker bgcButton;
-    Button fcButton;
-    Button otcButton;
+    ColorPicker fcButton;
+    ColorPicker otcButton;
     Button SnapshotButton;
     
     // LABELS
@@ -232,6 +233,7 @@ public class Workspace extends AppWorkspaceComponent {
         BackGroundColor.getChildren().add(bgColor);
         
         bgcButton = new ColorPicker();
+        bgcButton.setValue(Color.valueOf("0xffef84"));
         bgcButton.setOnAction(e -> {
             pageEditController.changeBackgroundColor(bgcButton);
         });
@@ -244,7 +246,10 @@ public class Workspace extends AppWorkspaceComponent {
         fColor = new Label("Fill Color");
         FillColor.getChildren().add(fColor);
         
-        fcButton = new Button("fill color");
+        fcButton = new ColorPicker();
+        fcButton.setOnAction(e -> {
+            pageEditController.changFillColor(fcButton);
+        });
         FillColor.getChildren().add(fcButton);
         
         // OUTLINE COLOR
@@ -254,7 +259,10 @@ public class Workspace extends AppWorkspaceComponent {
         otColor = new Label("Outline Color");
         OutlineColor.getChildren().add(otColor);
         
-        otcButton = new Button("outline color");
+        otcButton = new ColorPicker();
+        otcButton.setOnAction(e -> {
+            pageEditController.changeOutlineColor(otcButton);
+        });
         OutlineColor.getChildren().add(otcButton);
         
         // FOR COLOR SPACES
