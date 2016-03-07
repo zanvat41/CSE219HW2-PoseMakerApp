@@ -182,6 +182,9 @@ public class Workspace extends AppWorkspaceComponent {
         removeButton = new Button();
         Image removeImage = new Image("file:./images/Remove.png");
         removeButton.setGraphic(new ImageView(removeImage));
+        removeButton.setOnAction(e -> {
+            pageEditController.removeShape();
+        });
 	ShapeButtons.getChildren().add(removeButton);
         
         rectButton = new Button();

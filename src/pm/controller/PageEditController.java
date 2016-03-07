@@ -206,11 +206,16 @@ public class PageEditController {
             
             lastColor = (Color) selectedItem.getStroke();
             lastWidth = selectedItem.getStrokeWidth();
-            selectedItem.setStroke(Color.GREEN);
+            selectedItem.setStroke(Color.YELLOW); 
             selectedItem.setStrokeWidth(10);
             lastItem = selectedItem;
             selected = true;
         }
+    }
+    
+    public void removeShape() {
+        app.getGUI().getAppPane().getChildren().remove(selectedItem);
+        shapes.remove(selectedItem);
     }
     
     /**
