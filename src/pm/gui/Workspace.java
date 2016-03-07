@@ -174,6 +174,9 @@ public class Workspace extends AppWorkspaceComponent {
         selectButton = new Button();
         Image selectImage = new Image("file:./images/SelectionTool.png");
         selectButton.setGraphic(new ImageView(selectImage));
+        selectButton.setOnAction(e -> {
+            pageEditController.selectShape();
+        });
 	ShapeButtons.getChildren().add(selectButton);
    
         removeButton = new Button();

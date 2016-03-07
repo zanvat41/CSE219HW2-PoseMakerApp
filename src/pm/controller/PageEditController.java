@@ -2,15 +2,18 @@ package pm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.web.WebEngine;
 import properties_manager.PropertiesManager;
 import saf.controller.AppFileController;
@@ -34,12 +37,18 @@ public class PageEditController {
     // HERE'S THE FULL APP, WHICH GIVES US ACCESS TO OTHER STUFF
     PoseMaker app;
 
-    double bX, bY;
-    double eX, eY;
-    // double previousX, previousY;
+    double bX, bY; // Starting point for drawing
+    double eX, eY; // Ending point for drawing
+    double bX1, bY1; // Starting point for selecting
     
+    Shape selectedItem = null;
+    Shape lastItem = null;
+    Shape lastItemStyle = null;
+    ArrayList<Shape> shapes = new ArrayList();
     Rectangle rect;
     Ellipse ellipse;
+    
+    boolean selected = false;
 
     /**
      * Constructor for initializing this object, it will keep the app for later.
@@ -63,13 +72,16 @@ public class PageEditController {
     
     public void addRect() {
         // FIRST, CHANGE THE SIZE OF THE CURSOR
-        app.getGUI().getAppPane().setCursor(Cursor.MOVE);
+        app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
+        
+        // THEN DRAW
         app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 bX = mouseEvent.getX();
                 bY = mouseEvent.getY();
-                //System.out.println(bX);
+                eX = bX;
+                eY = bY;
             }
         }); 
         
@@ -95,21 +107,27 @@ public class PageEditController {
         rect = new Rectangle(bX, bY, eX - bX, eY - bY);
         rect.setFill(Color.BLACK);
         app.getGUI().getAppPane().getChildren().add(rect);
+        shapes.add(rect);
     }
     
     private void deleteRect() {
         app.getGUI().getAppPane().getChildren().remove(rect);
+        shapes.remove(rect);
     }
     
     
     public void addEllipse() {
         // FIRST, CHANGE THE SIZE OF THE CURSOR
-        app.getGUI().getAppPane().setCursor(Cursor.MOVE);
+        app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
+        
+        // THEN DRAW
         app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 bX = mouseEvent.getX();
                 bY = mouseEvent.getY();
+                eX = bX;
+                eY = bY;
             }
         }); 
         
@@ -135,10 +153,66 @@ public class PageEditController {
         ellipse = new Ellipse((eX + bX) / 2, (eY + bY) / 2, (eX - bX) / 2, (eY - bY) / 2);
         ellipse.setFill(Color.RED);
         app.getGUI().getAppPane().getChildren().add(ellipse);
+        shapes.add(ellipse);
     }
     
     private void deleteEllipse() {
         app.getGUI().getAppPane().getChildren().remove(ellipse);
+        shapes.remove(ellipse);
+    }
+    
+    public void selectShape() {
+        // FIRST, CHANGE THE SIZE OF THE CURSOR
+        app.getGUI().getAppPane().setCursor(Cursor.DEFAULT);
+        
+        // THEN SELECT THE SHAPE
+        app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                bX1 = mouseEvent.getX();
+                bY1 = mouseEvent.getY();
+                select();
+            }
+        });
+        
+        app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                //bX1 = mouseEvent.getX();
+                //bY1 = mouseEvent.getY();
+                //select();
+            }
+        });
+    }
+    
+    private void select() {
+        //ObservableList<Node> Nodes = app.getGUI().getAppPane().getChildren();
+        Point2D p = new Point2D(bX1, bY1);
+        boolean contains = false;
+        for (Shape s : shapes) {
+            if(s.contains(p)) {
+                selectedItem = s;
+                contains = true;
+            }
+        }
+        if (contains) {
+            if(selected){
+                //app.getGUI().getAppPane().getChildren().remove(lastItem);
+                //shapes.remove(lastItem);
+                //app.getGUI().getAppPane().getChildren().add(lastItemStyle);
+                //shapes.add(lastItemStyle);
+            }
+            lastItemStyle = selectedItem;
+            //System.out.println(lastItemStyle);
+            app.getGUI().getAppPane().getChildren().remove(selectedItem);
+            shapes.remove(selectedItem);
+            selectedItem.setStroke(Color.GREEN);
+            selectedItem.setStrokeWidth(10);
+            app.getGUI().getAppPane().getChildren().add(selectedItem);
+            shapes.add(selectedItem);
+            lastItem = selectedItem;
+            selected = true;
+        }
     }
     
     /**
