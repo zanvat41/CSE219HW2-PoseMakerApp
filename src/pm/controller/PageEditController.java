@@ -236,7 +236,7 @@ public class PageEditController {
             lastColor = (Color) selectedItem.getStroke();
             lastWidth = selectedItem.getStrokeWidth();
             selectedItem.setStroke(Color.YELLOW); 
-            selectedItem.setStrokeWidth(10);
+            selectedItem.setStrokeWidth(5);
             lastItem = selectedItem;
             selected = true;
         }
@@ -245,6 +245,7 @@ public class PageEditController {
     public void removeShape() {
         app.getGUI().getAppPane().getChildren().remove(selectedItem);
         shapes.remove(selectedItem);
+        selected =  false;
     }
     
     
@@ -278,18 +279,35 @@ public class PageEditController {
     public void changFillColor(ColorPicker color) {
         fColor = color.getValue().toString();
         fColor = fColor.substring(2);
-        fill = Color.valueOf(fColor);     
+        fill = Color.valueOf(fColor);  
+        if(selected) {    
+            updateSelectedItem();
+        }
     }
 
     public void changeOutlineColor(ColorPicker color) {
         otColor = color.getValue().toString();
         otColor = otColor.substring(2);
         outline = Color.valueOf(otColor);
+        if(selected) {    
+            updateSelectedItem();
+        }
+        
     }
     
     public void changeOutlineThickness(Slider s) {
         thickness = s.getValue();
+        if(selected) {    
+            updateSelectedItem();
+        }
     }
+    
+    private void updateSelectedItem() {
+        selectedItem.setFill(fill);
+        lastColor = outline;
+        lastWidth = thickness;
+    }
+    
     /**
      * This function responds live to the user typing changes into a text field
      * for updating element attributes. It will respond by updating the
