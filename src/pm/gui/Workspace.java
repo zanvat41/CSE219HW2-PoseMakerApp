@@ -354,6 +354,7 @@ public class Workspace extends AppWorkspaceComponent {
         Thickness.getStyleClass().add(CLASS_MAX_PANE);
         otThick.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         Snapshot.getStyleClass().add(CLASS_MAX_PANE);
+        refreshButtons(false);
     }
 
     /**
@@ -441,4 +442,25 @@ public class Workspace extends AppWorkspaceComponent {
 	    //dialog.show(props.getProperty(UPDATE_ERROR_TITLE), props.getProperty(UPDATE_ERROR_MESSAGE));
 	}
     }
+    
+    public void refreshButtons(boolean selected) {
+        if(rightPane.getChildren().size() < 1) {
+            selectButton.setDisable(true);
+            removeButton.setDisable(true);
+            frontButton.setDisable(true);
+            backButton.setDisable(true);
+        } else {
+            selectButton.setDisable(false);
+        }
+        if (selected) {
+            removeButton.setDisable(false);
+            frontButton.setDisable(false);
+            backButton.setDisable(false);
+        } else {
+            removeButton.setDisable(true);
+            frontButton.setDisable(true);
+            backButton.setDisable(true);
+        }
+    }
+    
 }

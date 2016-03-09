@@ -140,6 +140,8 @@ public class PageEditController {
         rect.setStrokeWidth(thickness);
         canvas.getChildren().add(rect);
         shapes.add(rect);
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.refreshButtons(selected);
     }
     
     private void deleteRect(Pane canvas) {
@@ -184,7 +186,7 @@ public class PageEditController {
                     drawEllipse(canvas);
                 }
             }); 
-            }
+        }
     }
 
     private void drawEllipse(Pane canvas) {
@@ -194,6 +196,8 @@ public class PageEditController {
         ellipse.setStrokeWidth(thickness);
         canvas.getChildren().add(ellipse);
         shapes.add(ellipse);
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.refreshButtons(selected);
     }
     
     private void deleteEllipse(Pane canvas) {
@@ -275,6 +279,8 @@ public class PageEditController {
                 selected = false;
             }
         }
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.refreshButtons(selected);
     }
     
     public void removeShape() {
@@ -285,6 +291,8 @@ public class PageEditController {
             canvas.getChildren().remove(selectedItem);
             shapes.remove(selectedItem);
             selected =  false;
+            Workspace workspace = (Workspace) app.getWorkspaceComponent();
+            workspace.refreshButtons(selected);
         }
     }
     
