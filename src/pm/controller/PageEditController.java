@@ -96,6 +96,10 @@ public class PageEditController {
     
     public void addRect() {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+                
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -152,6 +156,10 @@ public class PageEditController {
     
     public void addEllipse() {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+            
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -207,6 +215,10 @@ public class PageEditController {
     
     public void selectShape() {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+            
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -234,15 +246,16 @@ public class PageEditController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     if (selected) {
-                    double offsetX = mouseEvent.getSceneX() - scX;
-                    double offsetY = mouseEvent.getSceneY() - scY;
-                    double newTranslateX = bX2 + offsetX;
-                    double newTranslateY = bY2 + offsetY;
-                    if(selectedItem.isPressed()) {
-                        selectedItem.setTranslateX(newTranslateX);
-                        selectedItem.setTranslateY(newTranslateY);
+                        afc.markAsEdited(app.getGUI());
+                        double offsetX = mouseEvent.getSceneX() - scX;
+                        double offsetY = mouseEvent.getSceneY() - scY;
+                        double newTranslateX = bX2 + offsetX;
+                        double newTranslateY = bY2 + offsetY;
+                        if(selectedItem.isPressed()) {
+                            selectedItem.setTranslateX(newTranslateX);
+                            selectedItem.setTranslateY(newTranslateY);
+                        }
                     }
-                }
                 }
             });
         }
@@ -285,6 +298,10 @@ public class PageEditController {
     
     public void removeShape() {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+                
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -299,6 +316,10 @@ public class PageEditController {
     
     public void moveToFront() {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+                
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -312,6 +333,10 @@ public class PageEditController {
     
     public void moveToBack() {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+            
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -336,6 +361,10 @@ public class PageEditController {
 
     public void changeBackgroundColor(ColorPicker color) {
         if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            afc.markAsEdited(app.getGUI());
+            
             bgColor = color.getValue().toString();
             bgColor = bgColor.substring(2);
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
@@ -376,6 +405,10 @@ public class PageEditController {
     }
     
     private void updateSelectedItem() {
+        // MARK THE FILE AS EDITED
+        AppFileController afc = new AppFileController(app);
+        afc.markAsEdited(app.getGUI());
+        
         selectedItem.setFill(fill);
         lastColor = outline;
         lastWidth = thickness;

@@ -7,9 +7,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
@@ -17,6 +19,9 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -40,6 +45,10 @@ import saf.components.AppFileComponent;
  * @version 1.0
  */
 public class FileManager implements AppFileComponent {
+    
+    private final String ELLIPSE = "class javafx.scene.shape.Ellipse";
+    private final String RECT = "class javafx.scene.shape.Rectangle";
+    
 
     /**
      * This method is for saving user work, which in the case of this
@@ -98,10 +107,10 @@ public class FileManager implements AppFileComponent {
 	pw.close();
     }
     
-    int maxNodeCounter;
+    int shapeCounter;
     
     private void fillArrayWithShapes(Pane root, JsonArrayBuilder arrayBuilder, ColorPicker cp) {
-	maxNodeCounter = 0;
+	shapeCounter = 0;
 	
 	// FIRST THE ROOT NODE
 	//Node nodeData = root.getValue();
@@ -109,30 +118,76 @@ public class FileManager implements AppFileComponent {
         //root.get;
 	//nodeData.setNodeIndex(0);
 	//nodeData.setParentIndex(-1);
-	JsonObject tagObject = makeTagJsonObject(root, cp);
+	JsonObject tagObject = makeTagJsonObject(cp);
 	arrayBuilder.add(tagObject);
 	
 	// INC THE COUNTER
-	maxNodeCounter++;
+	//maxNodeCounter++;
 
 	// AND NOW START THE RECURSIVE FUNCTION
-	//addChildrenToTagTreeJsonObject(root, arrayBuilder);
+	addChildrenToTagTreeJsonObject(root, arrayBuilder);
     }
     
     // HELPER METHOD FOR SAVING DATA TO A JSON FORMAT
-    private JsonObject makeTagJsonObject(Pane canvas, ColorPicker cp) {
+    private JsonObject makeTagJsonObject(ColorPicker cp) {
 	String background = 
-        cp.getValue().toString().substring(0, 8);
-        System.out.println(cp.getValue().toString());
+        cp.getValue().toString();
+        //System.out.println(cp.getValue().toString());
         //System.out.println(UIManager.getColor(canvas.getStyle()));
 	//HashMap<String, String> attributes = tag.getAttributes();
 	//ArrayList<String> legalParents = tag.getLegalParents();
 	JsonObject jso = Json.createObjectBuilder()
-                .add("Canvas", background)
+                .add("Background Color", background)
 		.build();
 	return jso;
     }  
     
+        // HELPER METHOD FOR SAVING DATA TO A JSON FORMAT
+        private void addChildrenToTagTreeJsonObject(Pane canvas, JsonArrayBuilder arrayBuilder) {
+	ObservableList<Node> children = canvas.getChildren();
+	for (Node n : children) {
+            System.out.println(n.getClass().toString());
+            if(n.getClass().toString().equals(ELLIPSE)) {
+                Ellipse e = (Ellipse) n;
+                JsonObject jso = Json.createObjectBuilder()
+                    .add("Ellipse", shapeCounter)
+                    .add("CenterX", e.getCenterX())
+                    .add("CenterY", e.getCenterY())
+                    .add("RadiusX", e.getRadiusX())    
+                    .add("RadiusY", e.getRadiusY())
+                    .add("LayoutX", e.getLayoutX())
+                    .add("LayoutY", e.getLayoutY())
+                    .add("Translate X", e.getTranslateX())
+                    .add("Translate Y", e.getTranslateY())
+                    .add("Fill", e.getFill().toString())
+                    .add("Stroke", e.getStroke().toString())
+                    .add("StrokeWidth", e.getStrokeWidth())    
+                    .build();
+                arrayBuilder.add(jso);
+                shapeCounter ++;
+                
+            } else if (n.getClass().toString().equals(RECT)){
+                Rectangle r = (Rectangle) n;
+                JsonObject jso = Json.createObjectBuilder()
+                    .add("Rectangle", shapeCounter)
+                    .add("X", r.getX())
+                    .add("Y", r.getY())
+                    .add("Width", r.getWidth())    
+                    .add("Height", r.getHeight())
+                    .add("LayoutX", r.getLayoutX())
+                    .add("LayoutY", r.getLayoutY())
+                    .add("Translate X", r.getTranslateX())
+                    .add("Translate Y", r.getTranslateY())
+                    .add("Fill", r.getFill().toString())
+                    .add("Stroke", r.getStroke().toString())
+                    .add("StrokeWidth", r.getStrokeWidth())    
+                    .build();
+                arrayBuilder.add(jso);
+                shapeCounter ++;
+            
+            }
+	}
+    }
     /**
      * This method loads data from a JSON formatted file into the data 
      * management component and then forces the updating of the workspace

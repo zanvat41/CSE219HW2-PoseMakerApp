@@ -2,7 +2,35 @@
 {
     "SHAPE_TREE":[
         {
-            "Canvas":"0xcc6633ff"
+            "Background Color":"0x336633ff"
+        },
+        {
+            "Rectangle":0,
+            "X":241.0,
+            "Y":184.0,
+            "Width":291.0,
+            "Height":72.0,
+            "LayoutX":0.0,
+            "LayoutY":0.0,
+            "Translate X":578.0,
+            "Translate Y":0.0,
+            "Fill":"0xffffffff",
+            "Stroke":"0xffff00ff",
+            "StrokeWidth":5.0
+        },
+        {
+            "Ellipse":1,
+            "CenterX":697.0,
+            "CenterY":600.0,
+            "RadiusX":217.0,
+            "RadiusY":80.0,
+            "LayoutX":0.0,
+            "LayoutY":0.0,
+            "Translate X":0.0,
+            "Translate Y":0.0,
+            "Fill":"0xffffffff",
+            "Stroke":"0xffffffff",
+            "StrokeWidth":0.0
         }
     ]
 }
