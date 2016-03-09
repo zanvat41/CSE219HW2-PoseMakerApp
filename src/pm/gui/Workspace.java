@@ -364,13 +364,25 @@ public class Workspace extends AppWorkspaceComponent {
 	    // OUR INITIALIZATION SELECTIONS
 	    pageEditController.enable(false);
             
-            // CLEAR THE CANVAS
+            // CLEAR ALL THE SHAPES
             if(gui.getAppPane().getChildren().size() > 2) {
-                //System.out.println(poseWorkSpace.getChildren());
+                //System.out.println(gui.getAppPane().getChildren());
                 //poseWorkSpace.getChildren().remove(poseWorkSpace.getChildren().size() - 1);
                 //gui.getAppPane().getChildren().remove(2);
+                int i = gui.getAppPane().getChildren().size() - 1;
+                for(; i > 1; i--) {
+                    gui.getAppPane().getChildren().remove(i);
+                }   
             }
-
+            
+            // SET THE COLORS TO DEFAULT COLORS, PART I
+            bgcButton.setValue(Color.valueOf("0xffef84"));
+            fcButton.setValue(Color.WHITE);
+            otcButton.setValue(Color.WHITE);
+            
+            // SET THICKNESS TO DEFAULT THICKNESS
+            outlineSlider.setValue(0);
+            
 	    // FIRST CLEAR OUT THE OLD STUFF
 	    //tagPropertyLabels.clear();
 	    //tagPropertyTextFields.clear();
@@ -416,6 +428,16 @@ public class Workspace extends AppWorkspaceComponent {
 	    // WE DON'T WANT TO RESPOND TO EVENTS FORCED BY
 	    // OUR INITIALIZATION SELECTIONS
 	    pageEditController.enable(true);
+            
+            // SET THE COLORS TO DEFAULT COLORS, PART II
+            pageEditController.changeBackgroundColor(bgcButton);
+            pageEditController.changFillColor(fcButton);
+            pageEditController.changeOutlineColor(otcButton);
+            
+            // SET THICKNESS TO DEFAULT THICKNESS
+            pageEditController.changeOutlineThickness(outlineSlider);
+            
+            
 	} catch (Exception e) {
 	    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    PropertiesManager props = PropertiesManager.getPropertiesManager();
