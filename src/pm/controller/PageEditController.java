@@ -1,16 +1,20 @@
 package pm.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -20,6 +24,7 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.web.WebEngine;
+import javax.imageio.ImageIO;
 import properties_manager.PropertiesManager;
 import saf.controller.AppFileController;
 import saf.ui.AppMessageDialogSingleton;
@@ -91,142 +96,151 @@ public class PageEditController {
     
     public void addRect() {
         if(enabled) {
-        // FIRST, CHANGE THE SIZE OF THE CURSOR
-        app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            // FIRST, CHANGE THE SIZE OF THE CURSOR
+            app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
         
-        // THEN DRAW
-        app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                bX = mouseEvent.getX();
-                bY = mouseEvent.getY();
-                eX = bX;
-                eY = bY;
-            }
-        }); 
+            // THEN DRAW
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    bX = mouseEvent.getX();
+                    bY = mouseEvent.getY();
+                    eX = bX;
+                    eY = bY;
+                }
+            }); 
         
-        app.getGUI().getAppPane().setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                drawRect();
-                deleteRect();
-            }
-        }); 
+            canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    drawRect(canvas);
+                    deleteRect(canvas);
+                }
+            }); 
         
-        app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                eX = mouseEvent.getX();
-                eY = mouseEvent.getY();
-                deleteRect();
-                drawRect();
-            }
-        });
+            canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    eX = mouseEvent.getX();
+                    eY = mouseEvent.getY();
+                    deleteRect(canvas);
+                    drawRect(canvas);
+                }
+            });
         }
     }
 
-    private void drawRect() {
+    private void drawRect(Pane canvas) {
         rect = new Rectangle(bX, bY, eX - bX, eY - bY);
         rect.setFill(fill);
         rect.setStroke(outline);
         rect.setStrokeWidth(thickness);
-        app.getGUI().getAppPane().getChildren().add(rect);
+        canvas.getChildren().add(rect);
         shapes.add(rect);
     }
     
-    private void deleteRect() {
-        app.getGUI().getAppPane().getChildren().remove(rect);
+    private void deleteRect(Pane canvas) {
+        canvas.getChildren().remove(rect);
         shapes.remove(rect);
     }
     
     
     public void addEllipse() {
         if(enabled) {
-        // FIRST, CHANGE THE SIZE OF THE CURSOR
-        app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            // FIRST, CHANGE THE SIZE OF THE CURSOR
+            app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
         
-        // THEN DRAW
-        app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                bX = mouseEvent.getX();
-                bY = mouseEvent.getY();
-                eX = bX;
-                eY = bY;
-            }
-        }); 
+            // THEN DRAW
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    bX = mouseEvent.getX();
+                    bY = mouseEvent.getY();
+                    eX = bX;
+                    eY = bY;
+                }
+            }); 
         
-        app.getGUI().getAppPane().setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                drawEllipse();
-                deleteEllipse();
-            }
-        }); 
+            canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    drawEllipse(canvas);
+                    deleteEllipse(canvas);
+                }
+            }); 
         
-        app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                eX = mouseEvent.getX();
-                eY = mouseEvent.getY();
-                deleteEllipse();
-                drawEllipse();
+            canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    eX = mouseEvent.getX();
+                    eY = mouseEvent.getY();
+                    deleteEllipse(canvas);
+                    drawEllipse(canvas);
+                }
+            }); 
             }
-        }); 
-        }
     }
 
-    private void drawEllipse() {
+    private void drawEllipse(Pane canvas) {
         ellipse = new Ellipse((eX + bX) / 2, (eY + bY) / 2, (eX - bX) / 2, (eY - bY) / 2);
         ellipse.setFill(fill);
         ellipse.setStroke(outline);
         ellipse.setStrokeWidth(thickness);
-        app.getGUI().getAppPane().getChildren().add(ellipse);
+        canvas.getChildren().add(ellipse);
         shapes.add(ellipse);
     }
     
-    private void deleteEllipse() {
-        app.getGUI().getAppPane().getChildren().remove(ellipse);
+    private void deleteEllipse(Pane canvas) {
+        canvas.getChildren().remove(ellipse);
         shapes.remove(ellipse);
     }
     
     public void selectShape() {
         if(enabled) {
-        // FIRST, CHANGE THE SIZE OF THE CURSOR
-        app.getGUI().getAppPane().setCursor(Cursor.DEFAULT);
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            // FIRST, CHANGE THE SIZE OF THE CURSOR
+            app.getGUI().getAppPane().setCursor(Cursor.DEFAULT);
         
-        // THEN SELECT THE SHAPE
-        app.getGUI().getAppPane().setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                scX = mouseEvent.getSceneX();
-                scY = mouseEvent.getSceneY();
-                bX1 = mouseEvent.getX();
-                bY1 = mouseEvent.getY();
-                select();
-                if(selected) {
-                    bX2 = selectedItem.getTranslateX();
-                    bY2 = selectedItem.getTranslateY();
+            // THEN SELECT THE SHAPE
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                    public void handle(MouseEvent mouseEvent) {
+                    scX = mouseEvent.getSceneX();
+                    scY = mouseEvent.getSceneY();
+                    bX1 = mouseEvent.getX();
+                    bY1 = mouseEvent.getY();
+                    select();
+                    if(selected) {
+                        bX2 = selectedItem.getTranslateX();
+                        bY2 = selectedItem.getTranslateY();
+                    }
                 }
-            }
-        });
+            });
         
-        // DRAG AND DROP TO RELOCATE THE SHAPE
-        app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (selected) {
-                double offsetX = mouseEvent.getSceneX() - scX;
-                double offsetY = mouseEvent.getSceneY() - scY;
-                double newTranslateX = bX2 + offsetX;
-                double newTranslateY = bY2 + offsetY;
-                if(selectedItem.isPressed()) {
-                    selectedItem.setTranslateX(newTranslateX);
-                    selectedItem.setTranslateY(newTranslateY);
+            // DRAG AND DROP TO RELOCATE THE SHAPE
+            canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (selected) {
+                    double offsetX = mouseEvent.getSceneX() - scX;
+                    double offsetY = mouseEvent.getSceneY() - scY;
+                    double newTranslateX = bX2 + offsetX;
+                    double newTranslateY = bY2 + offsetY;
+                    if(selectedItem.isPressed()) {
+                        selectedItem.setTranslateX(newTranslateX);
+                        selectedItem.setTranslateY(newTranslateY);
+                    }
                 }
-            }
-            }
-        });
+                }
+            });
         }
     }
     
@@ -265,35 +279,51 @@ public class PageEditController {
     
     public void removeShape() {
         if(enabled) {
-        app.getGUI().getAppPane().getChildren().remove(selectedItem);
-        shapes.remove(selectedItem);
-        selected =  false;
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            canvas.getChildren().remove(selectedItem);
+            shapes.remove(selectedItem);
+            selected =  false;
         }
     }
     
     
     public void moveToFront() {
         if(enabled) {
-        int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
-        if (index + 1 < app.getGUI().getAppPane().getChildren().size())
-            swap(index, index + 1);
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            if(selected) {
+                int index = canvas.getChildren().indexOf(selectedItem);
+                if (index + 1 < canvas.getChildren().size())
+                    swap(index, index + 1);
+            }
         }
     }
     
     public void moveToBack() {
         if(enabled) {
-        int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
-        if (index >= shapes.size())
-            swap(index, index - 1);
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            if(selected){
+                int index = canvas.getChildren().indexOf(selectedItem);
+                if (index >= 1)
+                    swap(index, index - 1);
+            }
         }
     }
     
     private void swap(int x, int y) {
-        Shape shapeToSwap = (Shape) app.getGUI().getAppPane().getChildren().get(y);
+        BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+        BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+        Pane canvas = (Pane) pmWorkspace1.getCenter();
+        Shape shapeToSwap = (Shape) canvas.getChildren().get(y);
         Circle temp = new Circle();
-        app.getGUI().getAppPane().getChildren().set(x, temp);
-        app.getGUI().getAppPane().getChildren().set(y, selectedItem);
-        app.getGUI().getAppPane().getChildren().set(x, shapeToSwap);
+        canvas.getChildren().set(x, temp);
+        canvas.getChildren().set(y, selectedItem);
+        canvas.getChildren().set(x, shapeToSwap);
     }
 
     public void changeBackgroundColor(ColorPicker color) {
@@ -345,6 +375,23 @@ public class PageEditController {
     
     public void enable(boolean isAble) {
         enabled = isAble;
+    }
+
+    public void snapShot() {
+        try {
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            Pane canvas = (Pane) pmWorkspace1.getCenter();
+            SnapshotParameters parameters = new SnapshotParameters();
+            WritableImage wi = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+            WritableImage snapshot = canvas.snapshot(new SnapshotParameters(), wi);
+
+            File output = new File("Pose.png");
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+            } catch (IOException ex) {
+                // do sth
+            }
+        
     }
     /**
      * This function responds live to the user typing changes into a text field

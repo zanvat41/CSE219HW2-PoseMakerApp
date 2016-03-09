@@ -297,6 +297,9 @@ public class Workspace extends AppWorkspaceComponent {
         SnapshotButton = new Button();
         Image ssImage = new Image("file:./images/Snapshot.png");
         SnapshotButton.setGraphic(new ImageView(ssImage));
+        SnapshotButton.setOnAction(e -> {
+            pageEditController.snapShot();
+        });
 	Snapshot.getChildren().add(SnapshotButton);
         
         
@@ -365,14 +368,8 @@ public class Workspace extends AppWorkspaceComponent {
 	    pageEditController.enable(false);
             
             // CLEAR ALL THE SHAPES
-            if(gui.getAppPane().getChildren().size() > 2) {
-                //System.out.println(gui.getAppPane().getChildren());
-                //poseWorkSpace.getChildren().remove(poseWorkSpace.getChildren().size() - 1);
-                //gui.getAppPane().getChildren().remove(2);
-                int i = gui.getAppPane().getChildren().size() - 1;
-                for(; i > 1; i--) {
-                    gui.getAppPane().getChildren().remove(i);
-                }   
+            if(rightPane.getChildren().size() > 0) {
+                rightPane.getChildren().clear();
             }
             
             // SET THE COLORS TO DEFAULT COLORS, PART I
