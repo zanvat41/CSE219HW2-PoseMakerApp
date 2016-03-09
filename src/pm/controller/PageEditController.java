@@ -13,6 +13,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
@@ -41,30 +42,32 @@ public class PageEditController {
     // HERE'S THE FULL APP, WHICH GIVES US ACCESS TO OTHER STUFF
     PoseMaker app;
 
-    double bX, bY; // Starting point for drawing
-    double eX, eY; // Ending point for drawing
-    double bX1, bY1; // Starting point for selecting
-    double bX2, bY2; // Starting point for selecting and dragging
-    double eX1, eY1; // Ending point for selecting and dragging
-    double scX, scY;
+    private double bX, bY; // Starting point for drawing
+    private double eX, eY; // Ending point for drawing
+    private double bX1, bY1; // Starting point for selecting
+    private double bX2, bY2; // Starting point for selecting and dragging
+    private double eX1, eY1; // Ending point for selecting and dragging
+    private double scX, scY;
     
-    Shape selectedItem = null;
-    Shape lastItem = null;
-    Color lastColor;
-    double lastWidth;
-    ArrayList<Shape> shapes = new ArrayList();
-    Rectangle rect;
-    Ellipse ellipse;
+    private Shape selectedItem = null;
+    private Shape lastItem = null;
+    private Color lastColor;
+    private double lastWidth;
+    private ArrayList<Shape> shapes = new ArrayList();
+    private Rectangle rect;
+    private Ellipse ellipse;
     
-    boolean selected = false;
+    private boolean selected = false;
     
-    String bgColor = "ffef84";
-    String fColor = "Color.WHITE";
-    String otColor = "Color.WHITE";
+    private String bgColor = "ffef84";
+    private String fColor = "Color.WHITE";
+    private String otColor = "Color.WHITE";
     
-    Color fill = Color.WHITE;
-    Color outline = Color.WHITE;
-    double thickness = 0;
+    private Color fill = Color.WHITE;
+    private Color outline = Color.WHITE;
+    private double thickness = 0;
+    
+    private boolean enabled;
     
     /**
      * Constructor for initializing this object, it will keep the app for later.
@@ -87,6 +90,7 @@ public class PageEditController {
     }*/
     
     public void addRect() {
+        if(enabled) {
         // FIRST, CHANGE THE SIZE OF THE CURSOR
         app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
         
@@ -117,7 +121,8 @@ public class PageEditController {
                 deleteRect();
                 drawRect();
             }
-        }); 
+        });
+        }
     }
 
     private void drawRect() {
@@ -136,6 +141,7 @@ public class PageEditController {
     
     
     public void addEllipse() {
+        if(enabled) {
         // FIRST, CHANGE THE SIZE OF THE CURSOR
         app.getGUI().getAppPane().setCursor(Cursor.CROSSHAIR);
         
@@ -167,6 +173,7 @@ public class PageEditController {
                 drawEllipse();
             }
         }); 
+        }
     }
 
     private void drawEllipse() {
@@ -184,6 +191,7 @@ public class PageEditController {
     }
     
     public void selectShape() {
+        if(enabled) {
         // FIRST, CHANGE THE SIZE OF THE CURSOR
         app.getGUI().getAppPane().setCursor(Cursor.DEFAULT);
         
@@ -215,6 +223,7 @@ public class PageEditController {
                 }
             }
         });
+        }
     }
     
     private void select() {
@@ -243,22 +252,28 @@ public class PageEditController {
     }
     
     public void removeShape() {
+        if(enabled) {
         app.getGUI().getAppPane().getChildren().remove(selectedItem);
         shapes.remove(selectedItem);
         selected =  false;
+        }
     }
     
     
     public void moveToFront() {
+        if(enabled) {
         int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
         if (index + 1 < app.getGUI().getAppPane().getChildren().size())
             swap(index, index + 1);
+        }
     }
     
     public void moveToBack() {
+        if(enabled) {
         int index = app.getGUI().getAppPane().getChildren().indexOf(selectedItem);
         if (index >= shapes.size())
             swap(index, index - 1);
+        }
     }
     
     private void swap(int x, int y) {
@@ -270,35 +285,43 @@ public class PageEditController {
     }
 
     public void changeBackgroundColor(ColorPicker color) {
+        if(enabled) {
         bgColor = color.getValue().toString();
         bgColor = bgColor.substring(2);
         BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
-        pmWorkspace.getCenter().setStyle("-fx-background-color: #" +  bgColor +";");
+        BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+        pmWorkspace1.getCenter().setStyle("-fx-background-color: #" +  bgColor +";");
+        }
     }
 
     public void changFillColor(ColorPicker color) {
+        if(enabled) {
         fColor = color.getValue().toString();
         fColor = fColor.substring(2);
         fill = Color.valueOf(fColor);  
         if(selected) {    
             updateSelectedItem();
         }
+        }
     }
 
     public void changeOutlineColor(ColorPicker color) {
+        if(enabled) {
         otColor = color.getValue().toString();
         otColor = otColor.substring(2);
         outline = Color.valueOf(otColor);
         if(selected) {    
             updateSelectedItem();
         }
-        
+        }
     }
     
     public void changeOutlineThickness(Slider s) {
+        if(enabled) {
         thickness = s.getValue();
         if(selected) {    
             updateSelectedItem();
+        }
         }
     }
     
@@ -308,6 +331,9 @@ public class PageEditController {
         lastWidth = thickness;
     }
     
+    public void enable(boolean isAble) {
+        enabled = isAble;
+    }
     /**
      * This function responds live to the user typing changes into a text field
      * for updating element attributes. It will respond by updating the

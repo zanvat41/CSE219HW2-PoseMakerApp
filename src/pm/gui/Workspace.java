@@ -3,6 +3,7 @@ package pm.gui;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -16,6 +17,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
@@ -38,6 +40,8 @@ import pm.controller.PageEditController;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import static saf.components.AppStyleArbiter.CLASS_PROMPT_LABEL;
+import static saf.components.AppStyleArbiter.CLASS_PROMPT_TEXT_FIELD;
 
 /**
  * This class serves as the workspace component for this application, providing
@@ -131,7 +135,10 @@ public class Workspace extends AppWorkspaceComponent {
 	PropertiesManager propsSingleton = PropertiesManager.getPropertiesManager();
 
 	// WE'LL ORGANIZE OUR WORKSPACE COMPONENTS USING A BORDER PANE
-        BorderPane workspace = gui.getAppPane();
+        workspace = new BorderPane();
+        
+        BorderPane workspaceB = (BorderPane) workspace;
+        
         
 	poseWorkSpace = new BorderPane();
 
@@ -311,7 +318,7 @@ public class Workspace extends AppWorkspaceComponent {
 	poseWorkSpace.setCenter(rightPane);
 
 	// AND FINALLY, LET'S MAKE THE SPLIT PANE THE WORKSPACE
-        workspace.setCenter(poseWorkSpace);
+        workspaceB.setCenter(poseWorkSpace);
 
         // NOTE THAT WE HAVE NOT PUT THE WORKSPACE INTO THE WINDOW,
 	// THAT WILL BE DONE WHEN THE USER EITHER CREATES A NEW
@@ -352,6 +359,67 @@ public class Workspace extends AppWorkspaceComponent {
      */
     @Override
     public void reloadWorkspace() {
+        try {
+	    // WE DON'T WANT TO RESPOND TO EVENTS FORCED BY
+	    // OUR INITIALIZATION SELECTIONS
+	    pageEditController.enable(false);
+            
+            // CLEAR THE CANVAS
+            if(gui.getAppPane().getChildren().size() > 2) {
+                //System.out.println(poseWorkSpace.getChildren());
+                //poseWorkSpace.getChildren().remove(poseWorkSpace.getChildren().size() - 1);
+                //gui.getAppPane().getChildren().remove(2);
+            }
 
+	    // FIRST CLEAR OUT THE OLD STUFF
+	    //tagPropertyLabels.clear();
+	    //tagPropertyTextFields.clear();
+	    //tagEditorPane.getChildren().clear();
+
+	    // FIRST ADD THE LABEL
+	    //tagEditorPane.add(tagEditorLabel, 0, 0, 2, 1);
+
+	    // THEN LOAD IN ALL THE NEW STUFF
+	    /*TreeItem selectedItem = (TreeItem) htmlTree.getSelectionModel().getSelectedItem();
+	    if (selectedItem != null) {
+		HTMLTagPrototype selectedTag = (HTMLTagPrototype) selectedItem.getValue();
+		HashMap<String, String> attributes = selectedTag.getAttributes();
+		Collection<String> keys = attributes.keySet();
+		int row = 1;
+		for (String attributeName : keys) {
+		    String attributeValue = selectedTag.getAttribute(attributeName);
+		    Label attributeLabel = new Label(attributeName + ": ");
+		    attributeLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
+		    TextField attributeTextField = new TextField(attributeValue);
+		    attributeTextField.getStyleClass().add(CLASS_PROMPT_TEXT_FIELD);
+		    tagEditorPane.add(attributeLabel, 0, row);
+		    tagEditorPane.add(attributeTextField, 1, row);
+		    attributeTextField.textProperty().addListener(e -> {
+			// UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
+			pageEditController.handleAttributeUpdate(selectedTag, attributeName, attributeTextField.getText());
+		    });
+		    row++;
+		}
+	    }
+
+	    // LOAD THE CSS
+	    DataManager dataManager = (DataManager) app.getDataComponent();
+	    cssEditor.setText(dataManager.getCSSText());
+
+	    // THEN FORCE THE CHANGES TO THE TEMP HTML PAGE
+	    FileManager fileManager = (FileManager) app.getFileComponent();
+	    fileManager.exportData(dataManager, TEMP_PAGE);
+
+	    // AND REFRESH THE BROWSER
+	    htmlEngine.reload(); */
+
+	    // WE DON'T WANT TO RESPOND TO EVENTS FORCED BY
+	    // OUR INITIALIZATION SELECTIONS
+	    pageEditController.enable(true);
+	} catch (Exception e) {
+	    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+	    PropertiesManager props = PropertiesManager.getPropertiesManager();
+	    //dialog.show(props.getProperty(UPDATE_ERROR_TITLE), props.getProperty(UPDATE_ERROR_MESSAGE));
+	}
     }
 }
