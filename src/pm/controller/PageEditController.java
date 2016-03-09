@@ -204,8 +204,10 @@ public class PageEditController {
                 bX1 = mouseEvent.getX();
                 bY1 = mouseEvent.getY();
                 select();
-                bX2 = selectedItem.getTranslateX();
-                bY2 = selectedItem.getTranslateY();
+                if(selected) {
+                    bX2 = selectedItem.getTranslateX();
+                    bY2 = selectedItem.getTranslateY();
+                }
             }
         });
         
@@ -213,6 +215,7 @@ public class PageEditController {
         app.getGUI().getAppPane().setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if (selected) {
                 double offsetX = mouseEvent.getSceneX() - scX;
                 double offsetY = mouseEvent.getSceneY() - scY;
                 double newTranslateX = bX2 + offsetX;
@@ -221,6 +224,7 @@ public class PageEditController {
                     selectedItem.setTranslateX(newTranslateX);
                     selectedItem.setTranslateY(newTranslateY);
                 }
+            }
             }
         });
         }
@@ -248,6 +252,14 @@ public class PageEditController {
             selectedItem.setStrokeWidth(5);
             lastItem = selectedItem;
             selected = true;
+        } else {
+            if(selected) {
+                lastItem.setStroke(lastColor);
+                lastItem.setStrokeWidth(lastWidth);
+                selectedItem = null;
+                lastItem = null;
+                selected = false;
+            }
         }
     }
     
