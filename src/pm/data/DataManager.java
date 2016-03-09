@@ -34,4 +34,8 @@ public class DataManager implements AppDataComponent {
     public void reset() {
 
     }
+    
+    public AppTemplate getApp() {
+        return app;
+    }
 }

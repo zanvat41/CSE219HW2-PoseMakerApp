@@ -381,7 +381,7 @@ public class Workspace extends AppWorkspaceComponent {
             // SET THICKNESS TO DEFAULT THICKNESS
             outlineSlider.setValue(0);
             
-            initStyle();
+            //initStyle();
             
 	    // FIRST CLEAR OUT THE OLD STUFF
 	    //tagPropertyLabels.clear();

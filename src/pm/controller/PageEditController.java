@@ -336,11 +336,11 @@ public class PageEditController {
 
     public void changeBackgroundColor(ColorPicker color) {
         if(enabled) {
-        bgColor = color.getValue().toString();
-        bgColor = bgColor.substring(2);
-        BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
-        BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
-        pmWorkspace1.getCenter().setStyle("-fx-background-color: #" +  bgColor +";");
+            bgColor = color.getValue().toString();
+            bgColor = bgColor.substring(2);
+            BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+            pmWorkspace1.getCenter().setStyle("-fx-background-color: #" +  bgColor +";");
         }
     }
 
