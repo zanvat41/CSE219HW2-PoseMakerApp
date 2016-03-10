@@ -1,5 +1,10 @@
 package pm.data;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import pm.gui.Workspace;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
@@ -8,7 +13,7 @@ import saf.AppTemplate;
  * This class serves as the data management component for this application.
  *
  * @author Richard McKenna
- * @author ?
+ * @author Zhe Lin
  * @version 1.0
  */
 public class DataManager implements AppDataComponent {

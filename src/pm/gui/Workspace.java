@@ -118,6 +118,7 @@ public class Workspace extends AppWorkspaceComponent {
     // MARKER OF NEW FILE OR LOADED FILE
     boolean loaded = false;
     
+    
     /**
      * Constructor for initializing the workspace, note that this constructor
      * will fully setup the workspace user interface for use.
@@ -133,6 +134,11 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// KEEP THE GUI FOR LATER
 	gui = app.getGUI();
+        
+        initWorkspace();
+    }
+    
+    private void initWorkspace() {
         
         // THIS WILL PROVIDE US WITH OUR CUSTOM UI SETTINGS AND TEXT
 	PropertiesManager propsSingleton = PropertiesManager.getPropertiesManager();
@@ -330,7 +336,6 @@ public class Workspace extends AppWorkspaceComponent {
 	// THAT WILL BE DONE WHEN THE USER EITHER CREATES A NEW
 	// COURSE OR LOADS AN EXISTING ONE FOR EDITING
 	workspaceActivated = false;
-        
     }
     
     /**
@@ -371,58 +376,16 @@ public class Workspace extends AppWorkspaceComponent {
 	    // OUR INITIALIZATION SELECTIONS
 	    pageEditController.enable(false);
             
+            //if(!init) {
+                //initWorkspace();
+            //}
+            
             // CLEAR ALL THE SHAPES
             if(rightPane.getChildren().size() > 0 && !loaded) {
                 rightPane.getChildren().clear();
                 pageEditController.clearArray();
             }
             
-            // SET THICKNESS TO DEFAULT THICKNESS
-            outlineSlider.setValue(0);
-            
-            //initStyle();
-            
-	    // FIRST CLEAR OUT THE OLD STUFF
-	    //tagPropertyLabels.clear();
-	    //tagPropertyTextFields.clear();
-	    //tagEditorPane.getChildren().clear();
-
-	    // FIRST ADD THE LABEL
-	    //tagEditorPane.add(tagEditorLabel, 0, 0, 2, 1);
-
-	    // THEN LOAD IN ALL THE NEW STUFF
-	    /*TreeItem selectedItem = (TreeItem) htmlTree.getSelectionModel().getSelectedItem();
-	    if (selectedItem != null) {
-		HTMLTagPrototype selectedTag = (HTMLTagPrototype) selectedItem.getValue();
-		HashMap<String, String> attributes = selectedTag.getAttributes();
-		Collection<String> keys = attributes.keySet();
-		int row = 1;
-		for (String attributeName : keys) {
-		    String attributeValue = selectedTag.getAttribute(attributeName);
-		    Label attributeLabel = new Label(attributeName + ": ");
-		    attributeLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
-		    TextField attributeTextField = new TextField(attributeValue);
-		    attributeTextField.getStyleClass().add(CLASS_PROMPT_TEXT_FIELD);
-		    tagEditorPane.add(attributeLabel, 0, row);
-		    tagEditorPane.add(attributeTextField, 1, row);
-		    attributeTextField.textProperty().addListener(e -> {
-			// UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
-			pageEditController.handleAttributeUpdate(selectedTag, attributeName, attributeTextField.getText());
-		    });
-		    row++;
-		}
-	    }
-
-	    // LOAD THE CSS
-	    DataManager dataManager = (DataManager) app.getDataComponent();
-	    cssEditor.setText(dataManager.getCSSText());
-
-	    // THEN FORCE THE CHANGES TO THE TEMP HTML PAGE
-	    FileManager fileManager = (FileManager) app.getFileComponent();
-	    fileManager.exportData(dataManager, TEMP_PAGE);
-
-	    // AND REFRESH THE BROWSER
-	    htmlEngine.reload(); */
 
             FileManager fileManager = (FileManager) app.getFileComponent();
             

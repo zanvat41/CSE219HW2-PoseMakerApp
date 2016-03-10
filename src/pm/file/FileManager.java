@@ -215,8 +215,8 @@ public class FileManager implements AppFileComponent {
     }
     
     private void loadTreeTags(JsonArray jsonTagsArray, DataManager dataManager) {
-        ArrayList<Node> nodes = new ArrayList();
         PoseMaker app = (PoseMaker) dataManager.getApp();
+        app.getWorkspaceComponent().activateWorkspace(app.getGUI().getAppPane());
         BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
         BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
         BorderPane left = (BorderPane) pmWorkspace1.getLeft();
