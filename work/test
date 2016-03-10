@@ -1,0 +1,20 @@
+
+{
+    "SHAPE_TREE":[
+        {
+            "Background Color":"0xb3e6e6ff"
+        },
+        {
+            "Shape":"Ellipse",
+            "CenterX":"559.5",
+            "CenterY":"298.0",
+            "RadiusX":"328.5",
+            "RadiusY":"113.0",
+            "TranslateX":"290.0",
+            "TranslateY":"101.0",
+            "Fill":"0xff9966ff",
+            "Stroke":"0x666600ff",
+            "StrokeWidth":"14.669603524229075"
+        }
+    ]
+}

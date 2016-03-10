@@ -33,6 +33,7 @@ import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
 import javax.swing.UIManager;
 import pm.PoseMaker;
+import pm.controller.PageEditController;
 import pm.data.DataManager;
 import pm.gui.Workspace;
 import saf.components.AppDataComponent;
@@ -123,10 +124,6 @@ public class FileManager implements AppFileComponent {
     private JsonObject makeTagJsonObject(ColorPicker cp) {
 	String background = 
         cp.getValue().toString();
-        //System.out.println(cp.getValue().toString());
-        //System.out.println(UIManager.getColor(canvas.getStyle()));
-	//HashMap<String, String> attributes = tag.getAttributes();
-	//ArrayList<String> legalParents = tag.getLegalParents();
 	JsonObject jso = Json.createObjectBuilder()
                 .add("Background Color", background)
 		.build();
@@ -137,20 +134,19 @@ public class FileManager implements AppFileComponent {
         private void addChildrenToTagTreeJsonObject(Pane canvas, JsonArrayBuilder arrayBuilder) {
 	ObservableList<Node> children = canvas.getChildren();
 	for (Node n : children) {
-            System.out.println(n.getClass().toString());
             if(n.getClass().toString().equals(ELLIPSE)) {
                 Ellipse e = (Ellipse) n;
                 JsonObject jso = Json.createObjectBuilder()
-                    .add("Ellipse", shapeCounter)
-                    .add("CenterX", e.getCenterX())
-                    .add("CenterY", e.getCenterY())
-                    .add("RadiusX", e.getRadiusX())    
-                    .add("RadiusY", e.getRadiusY())
-                    .add("Translate X", e.getTranslateX())
-                    .add("Translate Y", e.getTranslateY())
+                    .add("Shape", "Ellipse")
+                    .add("CenterX", ((Double) e.getCenterX()).toString())
+                    .add("CenterY", ((Double) e.getCenterY()).toString())
+                    .add("RadiusX", ((Double) e.getRadiusX()).toString())    
+                    .add("RadiusY", ((Double) e.getRadiusY()).toString())
+                    .add("TranslateX", ((Double) e.getTranslateX()).toString())
+                    .add("TranslateY", ((Double) e.getTranslateY()).toString())
                     .add("Fill", e.getFill().toString())
                     .add("Stroke", e.getStroke().toString())
-                    .add("StrokeWidth", e.getStrokeWidth())    
+                    .add("StrokeWidth", ((Double) e.getStrokeWidth()).toString())    
                     .build();
                 arrayBuilder.add(jso);
                 shapeCounter ++;
@@ -158,16 +154,16 @@ public class FileManager implements AppFileComponent {
             } else if (n.getClass().toString().equals(RECT)){
                 Rectangle r = (Rectangle) n;
                 JsonObject jso = Json.createObjectBuilder()
-                    .add("Rectangle", shapeCounter)
-                    .add("X", r.getX())
-                    .add("Y", r.getY())
-                    .add("Width", r.getWidth())    
-                    .add("Height", r.getHeight())
-                    .add("Translate X", r.getTranslateX())
-                    .add("Translate Y", r.getTranslateY())
+                    .add("Shape", "Rect")
+                    .add("X", ((Double) r.getX()).toString())
+                    .add("Y", ((Double) r.getY()).toString())
+                    .add("Width", ((Double) r.getWidth()).toString())    
+                    .add("Height", ((Double) r.getHeight()).toString())
+                    .add("TranslateX", ((Double) r.getTranslateX()).toString())
+                    .add("TranslateY", ((Double) r.getTranslateY()).toString())
                     .add("Fill", r.getFill().toString())
                     .add("Stroke", r.getStroke().toString())
-                    .add("StrokeWidth", r.getStrokeWidth())    
+                    .add("StrokeWidth", ((Double) r.getStrokeWidth()).toString())    
                     .build();
                 arrayBuilder.add(jso);
                 shapeCounter ++;
@@ -229,20 +225,64 @@ public class FileManager implements AppFileComponent {
         VBox backgroundColor = (VBox) mid.getTop();
         ColorPicker cp = (ColorPicker) backgroundColor.getChildren().get(1);
         Pane canvas = (Pane) pmWorkspace1.getCenter();
-	
-        //System.out.println(jsonTagsArray);
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        PageEditController ctrl = workspace.getController();
         
 	// FIRST UPDATE THE ROOT
 	JsonObject rootJso = jsonTagsArray.getJsonObject(0);
         cp.setValue(Color.valueOf(rootJso.getString("Background Color")));
         canvas.setStyle("-fx-background-color: #" +  rootJso.getString("Background Color").substring(2) +";");
         
-        //System.out.println(rootJso);
-	// HTMLTagPrototype rootData = loadTag(rootJso);
-	// TreeItem root = dataManager.getHTMLRoot();
-	// nodes.add(root);
-	// root.getChildren().clear();
-	// root.setValue(rootData);
+        
+        
+        // AND NOW JUST GO THROUGH THE REST OF THE ARRAY
+        ctrl.clearArray();
+	for (int i = 1; i < jsonTagsArray.size(); i++) {
+	    JsonObject nodeJso = jsonTagsArray.getJsonObject(i);
+            if (nodeJso.getString("Shape").equals("Ellipse")) {
+                double centerX, centerY, radiusX, radiusY, translateX, translateY, sW;
+                String fill, stroke;
+                centerX = Double.parseDouble(nodeJso.getString("CenterX"));
+                centerY = Double.parseDouble(nodeJso.getString("CenterY"));
+                radiusX = Double.parseDouble(nodeJso.getString("RadiusX"));
+                radiusY = Double.parseDouble(nodeJso.getString("RadiusY"));
+                translateX = Double.parseDouble(nodeJso.getString("TranslateX"));
+                translateY = Double.parseDouble(nodeJso.getString("TranslateY"));
+                sW = Double.parseDouble(nodeJso.getString("StrokeWidth"));
+                fill = nodeJso.getString("Fill");
+                stroke = nodeJso.getString("Stroke");
+                Ellipse e = new Ellipse((double) centerX, (double) centerY, (double) radiusX, (double) radiusY);
+                e.setTranslateX(translateX);
+                e.setTranslateY(translateY);
+                e.setStroke(Color.valueOf(stroke));
+                e.setStrokeWidth(sW);
+                e.setFill(Color.valueOf(fill));
+                canvas.getChildren().add(e);
+                ctrl.addToArray(e);
+            } else if(nodeJso.getString("Shape").equals("Rect")) {
+                double X, Y, width, height, translateX, translateY, sW;
+                String fill, stroke;
+                X = Double.parseDouble(nodeJso.getString("X"));
+                Y = Double.parseDouble(nodeJso.getString("Y"));
+                width = Double.parseDouble(nodeJso.getString("Width"));
+                height = Double.parseDouble(nodeJso.getString("Height"));
+                translateX = Double.parseDouble(nodeJso.getString("TranslateX"));
+                translateY = Double.parseDouble(nodeJso.getString("TranslateY"));
+                sW = Double.parseDouble(nodeJso.getString("StrokeWidth"));
+                fill = nodeJso.getString("Fill");
+                stroke = nodeJso.getString("Stroke");
+                Rectangle r = new Rectangle((double) X, (double) Y, (double) width, (double) height);
+                r.setTranslateX(translateX);
+                r.setTranslateY(translateY);
+                r.setStroke(Color.valueOf(stroke));
+                r.setStrokeWidth(sW);
+                r.setFill(Color.valueOf(fill));
+                canvas.getChildren().add(r);
+                ctrl.addToArray(r);
+            
+            }
+            
+	}
     }    
     
     /**

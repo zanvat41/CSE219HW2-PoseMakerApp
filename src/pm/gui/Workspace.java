@@ -372,8 +372,9 @@ public class Workspace extends AppWorkspaceComponent {
 	    pageEditController.enable(false);
             
             // CLEAR ALL THE SHAPES
-            if(rightPane.getChildren().size() > 0) {
+            if(rightPane.getChildren().size() > 0 && !loaded) {
                 rightPane.getChildren().clear();
+                pageEditController.clearArray();
             }
             
             // SET THICKNESS TO DEFAULT THICKNESS
@@ -480,5 +481,9 @@ public class Workspace extends AppWorkspaceComponent {
     
     public void setLoaded(boolean b) {
         loaded = true;
+    }
+    
+    public PageEditController getController() {
+        return pageEditController;
     }
 }
