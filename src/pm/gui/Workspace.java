@@ -40,6 +40,7 @@ import pm.controller.PageEditController;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import static saf.components.AppStyleArbiter.CLASS_PROMPT_LABEL;
 import static saf.components.AppStyleArbiter.CLASS_PROMPT_TEXT_FIELD;
 
@@ -448,5 +449,11 @@ public class Workspace extends AppWorkspaceComponent {
     
     public PageEditController getController() {
         return pageEditController;
+    }
+
+    public void updateTools(Color fill, Color stroke, double strokeWidth) {
+        fcButton.setValue(fill);
+        otcButton.setValue(stroke);
+        outlineSlider.setValue(strokeWidth);
     }
 }

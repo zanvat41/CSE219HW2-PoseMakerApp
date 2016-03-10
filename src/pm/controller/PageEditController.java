@@ -262,8 +262,8 @@ public class PageEditController {
     }
     
     private void select() {
-        Point2D p = new Point2D(bX1, bY1);
         boolean contains = false;
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
         for (Shape s : shapes) {
             if(s.isPressed()) {
                 selectedItem = s;
@@ -276,7 +276,9 @@ public class PageEditController {
                 lastItem.setStroke(lastColor);
                 lastItem.setStrokeWidth(lastWidth);
             }
-            
+            fill = (Color) selectedItem.getFill();
+            outline = (Color) selectedItem.getStroke();
+            workspace.updateTools((Color) selectedItem.getFill(), (Color) selectedItem.getStroke(), selectedItem.getStrokeWidth());
             lastColor = (Color) selectedItem.getStroke();
             lastWidth = selectedItem.getStrokeWidth();
             selectedItem.setStroke(Color.YELLOW); 
@@ -292,7 +294,6 @@ public class PageEditController {
                 selected = false;
             }
         }
-        Workspace workspace = (Workspace) app.getWorkspaceComponent();
         workspace.refreshButtons(selected);
     }
     
@@ -397,7 +398,7 @@ public class PageEditController {
     
     public void changeOutlineThickness(Slider s) {
         if(enabled) {
-        thickness = s.getValue();
+            thickness = s.getValue();
         if(selected) {    
             updateSelectedItem();
         }
