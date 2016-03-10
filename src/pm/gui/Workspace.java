@@ -115,6 +115,9 @@ public class Workspace extends AppWorkspaceComponent {
     // SLIDER
     Slider outlineSlider;
     
+    // MARKER OF NEW FILE OR LOADED FILE
+    boolean loaded = false;
+    
     /**
      * Constructor for initializing the workspace, note that this constructor
      * will fully setup the workspace user interface for use.
@@ -373,11 +376,6 @@ public class Workspace extends AppWorkspaceComponent {
                 rightPane.getChildren().clear();
             }
             
-            // SET THE COLORS TO DEFAULT COLORS, PART I
-            bgcButton.setValue(Color.valueOf("0xffef84"));
-            fcButton.setValue(Color.WHITE);
-            otcButton.setValue(Color.WHITE);
-            
             // SET THICKNESS TO DEFAULT THICKNESS
             outlineSlider.setValue(0);
             
@@ -425,18 +423,33 @@ public class Workspace extends AppWorkspaceComponent {
 	    // AND REFRESH THE BROWSER
 	    htmlEngine.reload(); */
 
+            FileManager fileManager = (FileManager) app.getFileComponent();
+            
 	    // WE DON'T WANT TO RESPOND TO EVENTS FORCED BY
 	    // OUR INITIALIZATION SELECTIONS
 	    pageEditController.enable(true);
             
-            // SET THE COLORS TO DEFAULT COLORS, PART II
-            pageEditController.changeBackgroundColor(bgcButton);
-            pageEditController.changFillColor(fcButton);
-            pageEditController.changeOutlineColor(otcButton);
+            if(!loaded) {
+                // SET THE COLORS TO DEFAULT COLORS, PART I
+                bgcButton.setValue(Color.valueOf("0xffef84"));
+                fcButton.setValue(Color.WHITE);
+                otcButton.setValue(Color.WHITE);
             
-            // SET THICKNESS TO DEFAULT THICKNESS
-            pageEditController.changeOutlineThickness(outlineSlider);
+                // SET THICKNESS TO DEFAULT THICKNESS
+                outlineSlider.setValue(0);
             
+                // SET THE COLORS TO DEFAULT COLORS, PART II
+                pageEditController.changeBackgroundColor(bgcButton);
+                pageEditController.changFillColor(fcButton);
+                pageEditController.changeOutlineColor(otcButton);
+            
+                // SET THICKNESS TO DEFAULT THICKNESS
+                pageEditController.changeOutlineThickness(outlineSlider);
+            
+           
+            }
+            loaded = false;
+            refreshButtons(false);
             
 	} catch (Exception e) {
 	    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -465,4 +478,7 @@ public class Workspace extends AppWorkspaceComponent {
         }
     }
     
+    public void setLoaded(boolean b) {
+        loaded = true;
+    }
 }

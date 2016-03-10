@@ -2,35 +2,7 @@
 {
     "SHAPE_TREE":[
         {
-            "Background Color":"0xffef84ff"
-        },
-        {
-            "Ellipse":0,
-            "CenterX":393.0,
-            "CenterY":215.0,
-            "RadiusX":288.0,
-            "RadiusY":99.0,
-            "LayoutX":0.0,
-            "LayoutY":0.0,
-            "Translate X":9.0,
-            "Translate Y":-58.0,
-            "Fill":"0xffffffff",
-            "Stroke":"0xffffffff",
-            "StrokeWidth":0.0
-        },
-        {
-            "Rectangle":1,
-            "X":796.0,
-            "Y":73.0,
-            "Width":454.0,
-            "Height":113.0,
-            "LayoutX":0.0,
-            "LayoutY":0.0,
-            "Translate X":-73.0,
-            "Translate Y":65.0,
-            "Fill":"0xffffffff",
-            "Stroke":"0xffff00ff",
-            "StrokeWidth":5.0
+            "Background Color":"0xccffccff"
         }
     ]
 }

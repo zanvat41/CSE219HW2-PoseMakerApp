@@ -1,5 +1,6 @@
 package pm.data;
 
+import pm.gui.Workspace;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
 
@@ -32,7 +33,10 @@ public class DataManager implements AppDataComponent {
      */
     @Override
     public void reset() {
-
+	// NOW MAKE THE NODES
+	Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.reloadWorkspace();
+        
     }
     
     public AppTemplate getApp() {

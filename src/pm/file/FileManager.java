@@ -19,6 +19,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -33,6 +34,7 @@ import javax.json.stream.JsonGenerator;
 import javax.swing.UIManager;
 import pm.PoseMaker;
 import pm.data.DataManager;
+import pm.gui.Workspace;
 import saf.components.AppDataComponent;
 import saf.components.AppFileComponent;
 
@@ -66,7 +68,7 @@ public class FileManager implements AppFileComponent {
     public void saveData(AppDataComponent data, String filePath) throws IOException {
         StringWriter sw = new StringWriter();
 
-	// BUILD THE SHAPES ARRAY
+	// LOAD IN WORKSPACE
 	DataManager dataManager = (DataManager)data;
         PoseMaker app = (PoseMaker) dataManager.getApp();
 
@@ -79,7 +81,6 @@ public class FileManager implements AppFileComponent {
         BorderPane mid = (BorderPane) toolBar.getCenter();
         VBox backgroundColor = (VBox) mid.getTop();
         ColorPicker cp = (ColorPicker) backgroundColor.getChildren().get(1);
-        //System.out.println(left.getChildren());
         Pane root = (Pane) pmWorkspace1.getCenter();
 	fillArrayWithShapes(root, arrayBuilder, cp);
 	JsonArray nodesArray = arrayBuilder.build();
@@ -112,19 +113,9 @@ public class FileManager implements AppFileComponent {
     private void fillArrayWithShapes(Pane root, JsonArrayBuilder arrayBuilder, ColorPicker cp) {
 	shapeCounter = 0;
 	
-	// FIRST THE ROOT NODE
-	//Node nodeData = root.getValue();
-        
-        //root.get;
-	//nodeData.setNodeIndex(0);
-	//nodeData.setParentIndex(-1);
 	JsonObject tagObject = makeTagJsonObject(cp);
 	arrayBuilder.add(tagObject);
 	
-	// INC THE COUNTER
-	//maxNodeCounter++;
-
-	// AND NOW START THE RECURSIVE FUNCTION
 	addChildrenToTagTreeJsonObject(root, arrayBuilder);
     }
     
@@ -199,7 +190,22 @@ public class FileManager implements AppFileComponent {
      */
     @Override
     public void loadData(AppDataComponent data, String filePath) throws IOException {
-
+        // CLEAR THE OLD DATA OUT
+	DataManager dataManager = (DataManager)data;
+	dataManager.reset();
+        
+        // MARK IT AS LOAD FILE
+        PoseMaker app = (PoseMaker) dataManager.getApp();
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.setLoaded(true);
+	
+	// LOAD THE JSON FILE WITH ALL THE DATA
+	JsonObject json = loadJSONFile(filePath);
+        //System.out.println(filePath);
+	
+	// LOAD THE TAG TREE
+	JsonArray jsonTagTreeArray = json.getJsonArray("SHAPE_TREE");
+	loadTreeTags(jsonTagTreeArray, dataManager);
     }
 
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -211,6 +217,33 @@ public class FileManager implements AppFileComponent {
 	is.close();
 	return json;
     }
+    
+    private void loadTreeTags(JsonArray jsonTagsArray, DataManager dataManager) {
+        ArrayList<Node> nodes = new ArrayList();
+        PoseMaker app = (PoseMaker) dataManager.getApp();
+        BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+        BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
+        BorderPane left = (BorderPane) pmWorkspace1.getLeft();
+        BorderPane toolBar = (BorderPane) left.getTop();
+        BorderPane mid = (BorderPane) toolBar.getCenter();
+        VBox backgroundColor = (VBox) mid.getTop();
+        ColorPicker cp = (ColorPicker) backgroundColor.getChildren().get(1);
+        Pane canvas = (Pane) pmWorkspace1.getCenter();
+	
+        //System.out.println(jsonTagsArray);
+        
+	// FIRST UPDATE THE ROOT
+	JsonObject rootJso = jsonTagsArray.getJsonObject(0);
+        cp.setValue(Color.valueOf(rootJso.getString("Background Color")));
+        canvas.setStyle("-fx-background-color: #" +  rootJso.getString("Background Color").substring(2) +";");
+        
+        //System.out.println(rootJso);
+	// HTMLTagPrototype rootData = loadTag(rootJso);
+	// TreeItem root = dataManager.getHTMLRoot();
+	// nodes.add(root);
+	// root.getChildren().clear();
+	// root.setValue(rootData);
+    }    
     
     /**
      * This method exports the contents of the data manager to a 
