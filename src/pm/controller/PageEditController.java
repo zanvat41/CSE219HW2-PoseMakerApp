@@ -278,6 +278,7 @@ public class PageEditController {
             }
             fill = (Color) selectedItem.getFill();
             outline = (Color) selectedItem.getStroke();
+            thickness = selectedItem.getStrokeWidth();
             workspace.updateTools((Color) selectedItem.getFill(), (Color) selectedItem.getStroke(), selectedItem.getStrokeWidth());
             lastColor = (Color) selectedItem.getStroke();
             lastWidth = selectedItem.getStrokeWidth();
