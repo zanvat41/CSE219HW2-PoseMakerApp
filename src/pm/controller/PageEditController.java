@@ -281,7 +281,11 @@ public class PageEditController {
             lastColor = (Color) selectedItem.getStroke();
             lastWidth = selectedItem.getStrokeWidth();
             selectedItem.setStroke(Color.YELLOW); 
-            selectedItem.setStrokeWidth(5);
+            if(selectedItem.getStrokeWidth() >= 2){
+                selectedItem.setStrokeWidth(selectedItem.getStrokeWidth());
+            } else {
+                selectedItem.setStrokeWidth(2);
+            }
             lastItem = selectedItem;
             selected = true;
         } else {
@@ -398,9 +402,9 @@ public class PageEditController {
     public void changeOutlineThickness(Slider s) {
         if(enabled) {
             thickness = s.getValue();
-        if(selected) {    
-            updateSelectedItem();
-        }
+            if(selected) {    
+                updateSelectedItem();
+            }
         }
     }
     
@@ -412,6 +416,11 @@ public class PageEditController {
         selectedItem.setFill(fill);
         lastColor = outline;
         lastWidth = thickness;
+        if(thickness >= 2){
+            selectedItem.setStrokeWidth(thickness);
+        } else {
+            selectedItem.setStrokeWidth(2);
+        }
     }
     
     public void enable(boolean isAble) {
