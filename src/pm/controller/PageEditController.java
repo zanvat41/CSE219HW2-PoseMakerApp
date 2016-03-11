@@ -95,11 +95,7 @@ public class PageEditController {
     }*/
     
     public void addRect() {
-        if(enabled) {
-            // MARK THE FILE AS EDITED
-            AppFileController afc = new AppFileController(app);
-            afc.markAsEdited(app.getGUI());
-                
+        if(enabled) {                
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -138,6 +134,9 @@ public class PageEditController {
     }
 
     private void drawRect(Pane canvas) {
+        // MARK THE FILE AS EDITED
+        AppFileController afc = new AppFileController(app);
+        afc.markAsEdited(app.getGUI());
         rect = new Rectangle(bX, bY, eX - bX, eY - bY);
         rect.setFill(fill);
         rect.setStroke(outline);
@@ -156,10 +155,6 @@ public class PageEditController {
     
     public void addEllipse() {
         if(enabled) {
-            // MARK THE FILE AS EDITED
-            AppFileController afc = new AppFileController(app);
-            afc.markAsEdited(app.getGUI());
-            
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
             Pane canvas = (Pane) pmWorkspace1.getCenter();
@@ -198,6 +193,9 @@ public class PageEditController {
     }
 
     private void drawEllipse(Pane canvas) {
+        // MARK THE FILE AS EDITED
+        AppFileController afc = new AppFileController(app);
+        afc.markAsEdited(app.getGUI());
         ellipse = new Ellipse((eX + bX) / 2, (eY + bY) / 2, (eX - bX) / 2, (eY - bY) / 2);
         ellipse.setFill(fill);
         ellipse.setStroke(outline);
@@ -217,7 +215,6 @@ public class PageEditController {
         if(enabled) {
             // MARK THE FILE AS EDITED
             AppFileController afc = new AppFileController(app);
-            afc.markAsEdited(app.getGUI());
             
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             BorderPane pmWorkspace1 = (BorderPane) pmWorkspace.getCenter();
@@ -246,6 +243,7 @@ public class PageEditController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     if (selected) {
+                        // Mark as edited
                         afc.markAsEdited(app.getGUI());
                         double offsetX = mouseEvent.getSceneX() - scX;
                         double offsetY = mouseEvent.getSceneY() - scY;
