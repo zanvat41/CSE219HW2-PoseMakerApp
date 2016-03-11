@@ -84,16 +84,6 @@ public class PageEditController {
 	app = initApp;
     }
 
-    /**
-     * This mutator method lets us enable or disable this controller.
-     *
-     * @param enableSetting If false, this controller will not respond to
-     * workspace editing. If true, it will.
-     */
-    /*public void enable(boolean enableSetting) {
-	enabled = enableSetting;
-    }*/
-    
     public void addRect() {
         if(enabled) {                
             BorderPane pmWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
